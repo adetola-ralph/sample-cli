@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/adetola-ralph/sample-cli/util"
 )
 
 func main() {
@@ -42,16 +44,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	// if *textPtr == "" {
-	// 	flag.PrintDefaults()
-	// 	os.Exit(1)
-	// }
-
-	// if exists, _ := includes(metricChoices[:], *metricPtr); !exists {
-	// 	flag.PrintDefaults()
-	// 	os.Exit(1)
-	// }
-
 	if listCommand.Parsed() {
 		metricChoices := [3]string{"chars", "words", "lines"}
 		// required flags
@@ -65,7 +57,25 @@ func main() {
 			os.Exit(1)
 		}
 
-		fmt.Printf("textPtr: %s, metricPtr: %s, uniquePtr: %t\n", *listTextPtr, *listMetricPtr, *listUniquePtr)
+		listUtil := util.ListUtil{Text: *listTextPtr, Unique: *listUniquePtr}
+
+		switch *listMetricPtr {
+		case "words":
+			for _, v := range listUtil.Words() {
+				fmt.Println(v)
+			}
+		case "chars":
+			for _, v := range listUtil.Chars() {
+				fmt.Println(v)
+			}
+		case "lines":
+			for _, v := range listUtil.Lines() {
+				fmt.Println(v)
+			}
+		default:
+			fmt.Printf("textPtr: %s, metricPtr: %s, uniquePtr: %t\n", *listTextPtr, *listMetricPtr, *listUniquePtr)
+		}
+
 	}
 
 	if countCommand.Parsed() {
@@ -92,7 +102,20 @@ func main() {
 			os.Exit(1)
 		}
 
-		fmt.Printf("textPtr: %s, metricPtr: %s, substringPtr: %v, uniquePtr: %t\n", *countTextPtr, *countMetricPtr, *countSubstringPtr, *countUniquePtr)
+		countUtil := util.CountUtil{Text: *countTextPtr, Unique: *countUniquePtr, Substring: *countSubstringPtr}
+
+		switch *countMetricPtr {
+		case "words":
+			fmt.Println(countUtil.Words())
+		case "chars":
+			fmt.Println(countUtil.Chars())
+		case "lines":
+			fmt.Println(countUtil.Lines())
+		case "substring":
+			fmt.Println(countUtil.SubstringCount())
+		default:
+			fmt.Printf("textPtr: %s, metricPtr: %s, uniquePtr: %t\n", *countTextPtr, *countMetricPtr, *countUniquePtr)
+		}
 	}
 }
 

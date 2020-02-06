@@ -1,9 +1,14 @@
 package util
 
+import (
+	"strings"
+)
+
 // CountUtil ...
 type CountUtil struct {
-	Text   string
-	Unique bool
+	Text      string
+	Unique    bool
+	Substring string
 }
 
 var listUtil = ListUtil{}
@@ -33,4 +38,9 @@ func (c *CountUtil) Lines() int {
 
 	charSlice := listUtil.Lines()
 	return len(charSlice)
+}
+
+// SubstringCount ...
+func (c *CountUtil) SubstringCount() int {
+	return strings.Count(strings.ToLower(c.Text), strings.ToLower(c.Substring))
 }
